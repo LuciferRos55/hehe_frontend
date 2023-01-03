@@ -94,46 +94,21 @@ export default function Header() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar sx={{ backgroundColor: '#afa98e' }}>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
+        <Toolbar sx={{ backgroundColor: '#03dffc' }}>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             <Link className={classes.link} to="/">
-              Class Room
+              Advanced Web
             </Link>
           </Typography>
-          <Link className={classes.link} to="/presentation">
-            <Button color="inherit">
-              Presentation
-            </Button>
-          </Link>
-
-          {!isLoginIn && (
-            (!mode && (
-              <Link className={classes.link} to="/login">
-                <Button color="inherit" onClick={handleLoginClick}>
-                  Login
-                </Button>
-              </Link>
-            )) || (mode && (
-              <Link className={classes.link} to="/register">
-                <Button color="inherit" onClick={handleRegisterClick}>
-                  Register
-                </Button>
-              </Link>
-            )
-            ))}
 
           {isLoginIn && (
             <div>
+              <Link className={classes.link} to="/presentation">
+                <Button color="inherit">
+                  Presentation
+                </Button>
+              </Link>
               <IconButton color="inherit" onClick={handleFeatureClick}>
                 <AddCircleIcon fontSize='large' />
               </IconButton>

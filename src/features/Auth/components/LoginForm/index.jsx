@@ -34,7 +34,7 @@ const useStyles = makeStyles(() => ({
 
   },
   link: {
-    "margin-top": "15px", 
+    "margin-top": "15px",
     "text-decoration": "none"
   }
 }));
@@ -59,11 +59,6 @@ function LoginForm(props) {
     if (onSubmit) {
       await onSubmit(values);
     }
-  };
-
-  const handleRegisterClick = () => {
-    const action = setMode();
-    dispatch(action);
   };
 
   const { isSubmitting } = form.formState
@@ -92,6 +87,8 @@ function LoginForm(props) {
             <InputField name="email" label="Email" form={form} />
             <PasswordField name="password" label="Password" form={form} />
 
+            <div className="">Forgot your password? <a href="/forgotpassword">Reset password</a></div>
+
             {
               isSubmitting &&
               <Box sx={{ display: 'flex', justifyContent: 'center' }}>
@@ -101,16 +98,29 @@ function LoginForm(props) {
 
             <Button sx={{
               marginTop: 2,
-              backgroundColor: '#afa98e'
+              backgroundColor: '#03dffc'
             }}
               disabled={isSubmitting} type="submit" variant="contained" color="primary" fullWidth>
               Sign In
             </Button>
+
           </form>
 
-          <NavLink className={classes.link} to="/register">
-            <Button sx={{color: '#afa98e'}} onClick={handleRegisterClick}>Register a account</Button>
-          </NavLink>
+          <Typography component="h3" variant="h5">
+            Or
+          </Typography>
+
+          <Button sx={{
+            marginTop: 2,
+            backgroundColor: '#03dffc'
+          }}
+            disabled={isSubmitting} href="/signon" variant="contained" color="primary" fullWidth>
+            Continue with Google
+          </Button>
+          <div className="">
+            <div className="">Dont have an account? <a href="/register">Register Now!</a></div>
+          </div>
+
         </Box>
       </Container>
     </ThemeProvider>
