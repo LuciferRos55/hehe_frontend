@@ -73,15 +73,6 @@ export default function Header() {
     setAnchorElFeature(null);
   };
 
-  const handleRegisterClick = () => {
-    const action = setMode();
-    dispatch(action);
-  };
-  const handleLoginClick = () => {
-    const action = setMode();
-    dispatch(action);
-  };
-
   const handleClickOpenDialogCreateGroup = () => {
     setOpenDialogCreateGroup(true);
     handleCloseFeatureMenu()
@@ -94,10 +85,10 @@ export default function Header() {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
-        <Toolbar sx={{ backgroundColor: '#03dffc' }}>
+        <Toolbar sx={{ backgroundColor: '#2e6b73' }}>
 
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <Link className={classes.link} to="/">
+            <Link  className={classes.link} to="/">
               Advanced Web
             </Link>
           </Typography>

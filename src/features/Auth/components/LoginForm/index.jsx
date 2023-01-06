@@ -7,7 +7,8 @@
 /* eslint-disable no-use-before-define */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LockOutlined } from '@mui/icons-material';
-import { Avatar, Box, Button, Typography } from '@mui/material';
+import GoogleIcon from '@mui/icons-material/Google';
+import { Link, Stack, Avatar, Box, Button, Typography } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -60,6 +61,7 @@ function LoginForm(props) {
       await onSubmit(values);
     }
   };
+  const handleGoogle = async (values) => { }
 
   const { isSubmitting } = form.formState
 
@@ -86,8 +88,20 @@ function LoginForm(props) {
           <form onSubmit={form.handleSubmit(handleSubmit)}>
             <InputField name="email" label="Email" form={form} />
             <PasswordField name="password" label="Password" form={form} />
-
-            <div className="">Forgot your password? <a href="/forgotpassword">Reset password</a></div>
+            <Stack direction='row' sx={{
+              marginTop: 2
+            }}>
+              <Typography variant="h8">
+                Forgot your password?
+              </Typography>
+              <Typography component="div" variant="h8" sx={{
+                marginLeft: 1
+              }}>
+                <Link className={classes.link} href='/forgotpassword' underline='none'>
+                  Reset password
+                </Link>
+              </Typography>
+            </Stack>
 
             {
               isSubmitting &&
@@ -98,7 +112,7 @@ function LoginForm(props) {
 
             <Button sx={{
               marginTop: 2,
-              backgroundColor: '#03dffc'
+              backgroundColor: '#2e6b73'
             }}
               disabled={isSubmitting} type="submit" variant="contained" color="primary" fullWidth>
               Sign In
@@ -106,20 +120,36 @@ function LoginForm(props) {
 
           </form>
 
-          <Typography component="h3" variant="h5">
+          <Typography component="h3" variant="h5" sx={{
+            marginTop: 2
+          }}>
             Or
           </Typography>
 
           <Button sx={{
             marginTop: 2,
-            backgroundColor: '#03dffc'
+            backgroundColor: '#2e6b73'
+
           }}
-            disabled={isSubmitting} href="/signon" variant="contained" color="primary" fullWidth>
+            href="/signOn"
+            disabled={isSubmitting} variant="contained" color="primary" startIcon={<GoogleIcon />} fullWidth>
             Continue with Google
           </Button>
-          <div className="">
-            <div className="">Dont have an account? <a href="/register">Register Now!</a></div>
-          </div>
+
+          <Stack direction='row' sx={{
+            marginTop: 2
+          }}>
+            <Typography variant="h8">
+              Dont have an account?
+            </Typography>
+            <Typography component="div" variant="h8" sx={{
+              marginLeft: 1
+            }}>
+              <Link className={classes.link} href='/register' underline='none'>
+                Register Now!
+              </Link>
+            </Typography>
+          </Stack>
 
         </Box>
       </Container>

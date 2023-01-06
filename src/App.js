@@ -41,7 +41,6 @@ function App() {
         <Header />
         <Routes>
           <Route path="/chat" element={<ChatDialog socket={socket}/>} />
-          <Route path="/player" element={<FormPlayerMultipleChoice socket={socket}/>} />
           <Route path="/presentation/*" element={<PresentationFeature socket={socket}/>} />
           <Route path="/groups/*" element={<GroupFeature />} />
           <Route path="/invite/:groupId" element={<InviteGroup />} />
@@ -59,7 +58,6 @@ function App() {
       <div className="App">
         <Header />
         <Routes>
-          <Route path="/player" element={<FormPlayerMultipleChoice />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/login" />} />

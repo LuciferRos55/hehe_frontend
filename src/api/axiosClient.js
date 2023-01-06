@@ -8,7 +8,7 @@ const a = "https://web2-backend-8wpp.onrender.com";
 const b = "http://localhost:5000";
 
 const axiosClient = axios.create({
-  baseURL: a,
+  baseURL: b,
   headers: {
     // "Access-Control-Allow-Origin": "*",
     // "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS",
