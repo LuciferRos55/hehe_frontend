@@ -18,8 +18,8 @@ function Register(props) {
     const handleSubmit = async (values) => {
         try {
             const data = await userApi.register(values);
-
-            enqueueSnackbar("Register successfully. Check email to activation account!!", { variant: "success", autoHideDuration: 3000 });
+            enqueueSnackbar("Register successfully. Check email to activate account!!", { variant: "success", autoHideDuration: 3000 });
+            
         } catch (error) {
             enqueueSnackbar(error.message, { variant: "error", autoHideDuration: 1000 });
         }
