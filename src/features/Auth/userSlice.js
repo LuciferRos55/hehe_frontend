@@ -23,6 +23,16 @@ export const login = createAsyncThunk('user/login', async (payload) => {
     return data.user;
 });
 
+export const loginwithGoogle = createAsyncThunk('user/login/google', async (payload) => {
+    const { data } = await userApi.loginwithGoogle(payload);
+    // save data to local storage
+    console.log(data.token);
+    localStorage.setItem(StorageKeys.TOKEN, data.token);
+    localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
+
+    return data.user;
+});
+
 const counterSlice = createSlice({
     name: "user",
     initialState: {

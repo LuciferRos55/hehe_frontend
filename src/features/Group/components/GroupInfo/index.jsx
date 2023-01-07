@@ -36,10 +36,12 @@ function GroupInfo({ groupInfo }) {
 
     let groupName = "";
     let onwerName = "";
+    let desc ="";
     let groupId = "";
     if (group) {
         groupName = group.data.name;
         groupId = group.data._id;
+        desc = group.data.description;
 
     }
     if (data) {
@@ -65,6 +67,7 @@ function GroupInfo({ groupInfo }) {
             <Box padding={1} className={classes.boxOne} sx={{ border: 1, backgroundColor: '#afa98e' }}>
                 <Typography sx={{ color: 'white', fontFamily: 'Monospace' }} variant="h5">{groupName}</Typography>
                 <Typography sx={{ color: 'white', fontFamily: 'Monospace' }}>Owner Group: {onwerName}</Typography>
+                <Typography sx={{ color: 'white', fontFamily: 'Monospace' }}>Description: {desc}</Typography>
             </Box>
             <Box className={classes.boxTwo} marginTop={3}>
                 <GroupMemberList data={memberList} />

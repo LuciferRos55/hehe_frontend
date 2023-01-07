@@ -5,12 +5,13 @@ import React, { useState, useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 import LibraryAddIcon from '@mui/icons-material/LibraryAdd';
 import SendIcon from '@mui/icons-material/Send';
+import DeleteIcon from '@mui/icons-material/Delete';
 import * as yup from 'yup';
 import { useSelector } from 'react-redux';
 import { useSnackbar } from 'notistack';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import groupApi from '../../../api/groupApi';
 import InputField from '../../../components/form-controls/InputField';
 import GroupInfo from '../components/GroupInfo';
@@ -48,6 +49,24 @@ function DetailPage(props) {
     const [inviteLink, setInviteLink] = useState("");
     const [openDialogCreateInviteLink, setDialogCreateInviteLink] = useState(false);
     const [openDialogSendInviteLink, setDialogSendInviteLink] = useState(false);
+    const [openDialogConfirm, setDialogConfirm] = useState(false);
+    const navigate = useNavigate();
+
+    const handleCloseDialogConfirm = () => {
+        setDialogConfirm(false);
+    };
+    const handleClickOpenDialogConfirm = () => {
+        setDialogConfirm(true);
+    };
+    const handleConfirmDelete = async () => {
+        try {
+            await groupApi.deleteGroup(groupId);
+            navigate('/groups')
+        } catch (error) {
+            console.log("fail");
+        }
+
+    };
 
     const handleCloseDialogCreateInviteLink = () => {
         setDialogCreateInviteLink(false);
@@ -59,7 +78,7 @@ function DetailPage(props) {
         try {
             const response = await groupApi.getInviteGroupLink(groupId);
 
-            const inviteLinkFE = `https://web2-frontend-l6ij.vercel.app/invite/${groupId}`
+            const inviteLinkFE = `${process.env.REACT_APP_URL}/invite/${groupId}`
             if (response.data) {
                 setInviteLink(inviteLinkFE);
                 handleClickOpenDialogCreateInviteLink();
@@ -148,6 +167,13 @@ function DetailPage(props) {
                                 <Typography sx={{ color: 'black', fontFamily: 'Monospace' }} variant="subtitle1"> : Send link invite</Typography>
                             </IconButton>
                         </Box>
+
+                        <Box marginTop={2} sx={{ border: 1, borderRadius: 2, backgroundColor: '#afa98e' }}>
+                            <IconButton disabled={!isOwnerGroup} color="inherit" onClick={handleClickOpenDialogConfirm}>
+                                <DeleteIcon fontSize='large' />
+                                <Typography sx={{ color: 'black', fontFamily: 'Monospace' }} variant="subtitle1"> : Delete group</Typography>
+                            </IconButton>
+                        </Box>
                     </Grid>
                     <Grid item className={classes.right}>
                         <GroupInfo groupInfo={group} />
@@ -201,6 +227,30 @@ function DetailPage(props) {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+
+            <Dialog
+                open={openDialogConfirm}
+                onClose={handleCloseDialogConfirm}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogContent>
+                    <Typography component="h3" variant="h5">
+                        Are you sure?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    
+                    <Button variant='contained' color='error' onClick={handleConfirmDelete} >
+                        Yes
+                    </Button>
+                    <Button variant='outlined' onClick={handleCloseDialogConfirm} autoFocus>
+                        Cancel
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
         </Box>
 
 

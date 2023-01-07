@@ -19,6 +19,11 @@ const userApi = {
         });
     },
 
+    async loginwithGoogle(data){
+        const url = "/user/login/google";
+        return axiosClient.post(url,data)
+    },
+
     async update(data) {
         const url = "/user";
         return axiosClient.post(url, {

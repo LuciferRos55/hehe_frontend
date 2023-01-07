@@ -7,22 +7,22 @@
 /* eslint-disable no-use-before-define */
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LockOutlined } from '@mui/icons-material';
-import GoogleIcon from '@mui/icons-material/Google';
-import { Link, Stack, Avatar, Box, Button, Typography } from '@mui/material';
+import { Avatar, Box, Button, Link, Stack, Typography } from '@mui/material';
+import { useSnackbar } from 'notistack';
+import { GoogleLogin } from '@react-oauth/google';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
 import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import { NavLink } from 'react-router-dom';
 import * as yup from 'yup';
 import InputField from '../../../../components/form-controls/InputField';
 import PasswordField from '../../../../components/form-controls/PasswordField';
-import { setMode } from '../../../../components/Header/headerSlice';
+import { loginwithGoogle } from '../../userSlice';
 
 const theme = createTheme();
 
@@ -43,6 +43,7 @@ const useStyles = makeStyles(() => ({
 function LoginForm(props) {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
     email: yup.string().required('Please enter email.').email('Please enter a valid email address.'),
     password: yup.string().required('Please enter password').min(6, 'Password is too short'),
@@ -61,8 +62,6 @@ function LoginForm(props) {
       await onSubmit(values);
     }
   };
-  const handleGoogle = async (values) => { }
-
   const { isSubmitting } = form.formState
 
   return (
@@ -126,15 +125,15 @@ function LoginForm(props) {
             Or
           </Typography>
 
-          <Button sx={{
-            marginTop: 2,
-            backgroundColor: '#2e6b73'
-
-          }}
-            href="/signOn"
-            disabled={isSubmitting} variant="contained" color="primary" startIcon={<GoogleIcon />} fullWidth>
-            Continue with Google
-          </Button>
+          <GoogleLogin
+            onSuccess={credentialResponse => {
+              console.log(credentialResponse);
+            }}
+            onError={() => {
+              console.log('Login Failed');
+            }}
+            useOneTap
+          />;
 
           <Stack direction='row' sx={{
             marginTop: 2

@@ -59,6 +59,11 @@ const groupApi = {
             }
         });
     },
+
+    async deleteGroup(data) {
+        const url = "/group/delete_group";
+        return axiosClient.delete(`${url}/${data}`);
+    },
 };
 
 
