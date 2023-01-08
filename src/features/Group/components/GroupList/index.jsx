@@ -10,7 +10,7 @@ import Group from '../Group';
 
 function GroupList({ data }) {
     return (
-        <Box>
+        <Box sx={{ backgroundColor: '#18393d' }}>
             <Grid container spacing={2}>
                 {data.map((group) => (
                     <Grid item key={group.group_id._id} xs={12} sm={6} md={4} lg={2}>

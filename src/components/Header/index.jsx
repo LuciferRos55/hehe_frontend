@@ -97,7 +97,12 @@ export default function Header() {
             <div>
               <Link className={classes.link} to="/presentation">
                 <Button color="inherit">
-                  Presentation
+                  Presentations
+                </Button>
+              </Link>
+              <Link className={classes.link} to="/groups">
+                <Button color="inherit">
+                  Groups
                 </Button>
               </Link>
               <IconButton color="inherit" onClick={handleFeatureClick}>
@@ -107,6 +112,7 @@ export default function Header() {
                 <AccountCircle fontSize='large' />
               </IconButton>
             </div>
+            
           )}
         </Toolbar>
       </AppBar>

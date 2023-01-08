@@ -9,7 +9,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { LockOutlined } from '@mui/icons-material';
 import { Avatar, Box, Button, Link, Stack, Typography } from '@mui/material';
 import { useSnackbar } from 'notistack';
-import { GoogleLogin } from '@react-oauth/google';
+import { GoogleLogin, useGoogleLogin } from '@react-oauth/google';
+import { useNavigate } from 'react-router-dom';
+import GoogleIcon from '@mui/icons-material/Google';
 import CircularProgress from '@mui/material/CircularProgress';
 import Container from '@mui/material/Container';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -22,7 +24,9 @@ import { useDispatch } from 'react-redux';
 import * as yup from 'yup';
 import InputField from '../../../../components/form-controls/InputField';
 import PasswordField from '../../../../components/form-controls/PasswordField';
-import { loginwithGoogle } from '../../userSlice';
+import axios from 'axios';
+import userApi from '../../../../api/userApi';
+import StorageKeys from '../../../../constants/storage-keys';
 
 const theme = createTheme();
 
@@ -41,8 +45,9 @@ const useStyles = makeStyles(() => ({
 }));
 
 function LoginForm(props) {
+
+  const navigate = useNavigate();
   const classes = useStyles();
-  const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
   const schema = yup.object().shape({
     email: yup.string().required('Please enter email.').email('Please enter a valid email address.'),
@@ -62,6 +67,37 @@ function LoginForm(props) {
       await onSubmit(values);
     }
   };
+
+
+  const loginGoogle = useGoogleLogin({
+    onSuccess: async tokenResponse => {
+      try {
+        const res = await axios.get("https://www.googleapis.com/oauth2/v3/userinfo", {
+          headers: {
+            "Authorization": `Bearer ${tokenResponse.access_token}`
+          }
+        })
+        const { data } = await userApi.loginwithGoogle(res);
+        // save data to local storage
+        localStorage.setItem(StorageKeys.TOKEN, data.token);
+        localStorage.setItem(StorageKeys.USER, JSON.stringify(data.user));
+        navigate("/groups");
+        enqueueSnackbar("Login successfully", {
+          variant: "success",
+          autoHideDuration: 1000
+        });
+
+      } catch (error) {
+        enqueueSnackbar(error.message, {
+          variant: "error",
+          autoHideDuration: 1000
+        });
+        navigate("/login");
+      }
+
+    }
+  });
+
   const { isSubmitting } = form.formState
 
   return (
@@ -124,16 +160,15 @@ function LoginForm(props) {
           }}>
             Or
           </Typography>
+          <Button sx={{
+            marginTop: 2,
+          }}
+            onClick={loginGoogle}
+            variant="contained" color="error" fullWidth
+            startIcon={<GoogleIcon />}>
+            Continue with Google
+          </Button>
 
-          <GoogleLogin
-            onSuccess={credentialResponse => {
-              console.log(credentialResponse);
-            }}
-            onError={() => {
-              console.log('Login Failed');
-            }}
-            useOneTap
-          />;
 
           <Stack direction='row' sx={{
             marginTop: 2

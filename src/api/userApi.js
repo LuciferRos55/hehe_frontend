@@ -16,12 +16,17 @@ const userApi = {
         return axiosClient.post(url, {
             email: data.email,
             password: data.password,
+            withGoogle: "false"
         });
     },
 
-    async loginwithGoogle(data){
-        const url = "/user/login/google";
-        return axiosClient.post(url,data)
+    async loginwithGoogle(data) {
+        const url = "/user/logingoogle";
+        return axiosClient.post(url, {
+            email: data.data.email,
+            name: data.data.name,
+            withGoogle: "true"
+        });
     },
 
     async update(data) {

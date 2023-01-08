@@ -154,7 +154,7 @@ import { React, useEffect, useState } from 'react';
 import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { Box, Button, Dialog, DialogActions, DialogContent, Icon, IconButton, Typography } from '@mui/material';
+import { Box, Button, Dialog, DialogActions, Stack, DialogContent, Icon, IconButton, Typography } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import "./index.css";
 import { useSelector } from 'react-redux';
@@ -171,15 +171,14 @@ const useStyles = makeStyles(() => ({
     },
 }));
 
-function Chat({ open, handleClose, socket, presentationId }) {
+function Chat({ open, handleClose, socket, presentationId}) {
     const loggedInUser = useSelector(state => state.user.current)
-    const idloggedUser = loggedInUser?._id;
+    const idloggedUser = loggedInUser.id;
 
     const [messages, setMessages] = useState({});
 
     useEffect(() => {
         const messageListener = (message) => {
-            console.log(message)
             setMessages((prevMessages) => {
                 const newMessages = { ...prevMessages };
                 newMessages[message._id] = message;
@@ -201,8 +200,8 @@ function Chat({ open, handleClose, socket, presentationId }) {
         socket?.emit('getMessages', presentationId);
 
         return () => {
-          socket?.off('message', messageListener);
-          socket?.off('deleteMessage', deleteMessageListener);
+            socket?.off('message', messageListener);
+            socket?.off('deleteMessage', deleteMessageListener);
         };
     }, [socket]);
 
@@ -212,7 +211,7 @@ function Chat({ open, handleClose, socket, presentationId }) {
         socket.emit('message', {
             presentation_id: presentationId,
             message: value,
-            owner_id: idloggedUser
+            owner_id: presentationId,
         });
         setValue('');
     };
@@ -234,10 +233,10 @@ function Chat({ open, handleClose, socket, presentationId }) {
                 aria-describedby="alert-dialog-description"
                 disableScrollLock
             >
-                <IconButton sx={{paddingLeft: "450px"}} onClick={handleClose}>
+                <IconButton sx={{ paddingLeft: "450px" }} onClick={handleClose}>
                     <CloseIcon />
                 </IconButton>
-                <DialogContent dividers sx={{padding: "0px"}}>
+                <DialogContent dividers sx={{ padding: "0px" }}>
                     <div
                         id="scrollableDiv"
                         style={{
@@ -258,12 +257,24 @@ function Chat({ open, handleClose, socket, presentationId }) {
                             scrollableTarget="scrollableDiv"
                         >
                             <ul className="chat">
+
                                 {[...Object.values(messages)]
                                     .sort((a, b) => a.createdAt - b.createdAt)
                                     .map((message) => (
                                         (message.owner_id?._id === idloggedUser) ?
                                             <li className="message right">
-                                                <p>{message.message}</p>
+                                                <Stack direction='row' sx={{
+                                                    margin: 0
+                                                }}>
+                                                    <Typography variant="h10">
+                                                        {message.owner_name}
+                                                    </Typography>
+                                                    <Typography variant="h10" sx={{
+                                                        marginLeft: 1
+                                                    }}>
+                                                        {message.message}
+                                                    </Typography>
+                                                </Stack>
                                             </li> :
                                             <li className="message left">
                                                 <p>{message.message}</p>
@@ -295,7 +306,6 @@ Chat.propTypes = {
     handleClose: PropTypes.func,
     socket: PropTypes.object,
     presentationId: PropTypes.string,
-
 };
 
 export default Chat;
